@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EFE32CD6306C0ACA0012B71F /* MarketDataKit in Frameworks */ = {isa = PBXBuildFile; productRef = EFE32CD5306C0ACA0012B71F /* MarketDataKit */; };
+		EFE32CD8306C0ACA0012B71F /* MarketDataKitMocks in Frameworks */ = {isa = PBXBuildFile; productRef = EFE32CD7306C0ACA0012B71F /* MarketDataKitMocks */; };
+		EFE32CDA306C0ACA0012B71F /* OrderKit in Frameworks */ = {isa = PBXBuildFile; productRef = EFE32CD9306C0ACA0012B71F /* OrderKit */; };
+		EFE32CDC306C0ACA0012B71F /* OrderKitMocks in Frameworks */ = {isa = PBXBuildFile; productRef = EFE32CDB306C0ACA0012B71F /* OrderKitMocks */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EFE32C93306BD1B50012B71F /* Exchange24iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Exchange24iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +30,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFE32CDA306C0ACA0012B71F /* OrderKit in Frameworks */,
+				EFE32CD6306C0ACA0012B71F /* MarketDataKit in Frameworks */,
+				EFE32CDC306C0ACA0012B71F /* OrderKitMocks in Frameworks */,
+				EFE32CD8306C0ACA0012B71F /* MarketDataKitMocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +76,10 @@
 			);
 			name = Exchange24iOS;
 			packageProductDependencies = (
+				EFE32CD5306C0ACA0012B71F /* MarketDataKit */,
+				EFE32CD7306C0ACA0012B71F /* MarketDataKitMocks */,
+				EFE32CD9306C0ACA0012B71F /* OrderKit */,
+				EFE32CDB306C0ACA0012B71F /* OrderKitMocks */,
 			);
 			productName = Exchange24iOS;
 			productReference = EFE32C93306BD1B50012B71F /* Exchange24iOS.app */;
@@ -94,6 +109,9 @@
 			);
 			mainGroup = EFE32C8A306BD1B50012B71F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EFE32CD4306C0ACA0012B71F /* XCRemoteSwiftPackageReference "exchange24-kit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EFE32C94306BD1B50012B71F /* Products */;
 			projectDirPath = "";
@@ -322,6 +340,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EFE32CD4306C0ACA0012B71F /* XCRemoteSwiftPackageReference "exchange24-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/enjelhutasoit-com/exchange24-kit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EFE32CD5306C0ACA0012B71F /* MarketDataKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE32CD4306C0ACA0012B71F /* XCRemoteSwiftPackageReference "exchange24-kit" */;
+			productName = MarketDataKit;
+		};
+		EFE32CD7306C0ACA0012B71F /* MarketDataKitMocks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE32CD4306C0ACA0012B71F /* XCRemoteSwiftPackageReference "exchange24-kit" */;
+			productName = MarketDataKitMocks;
+		};
+		EFE32CD9306C0ACA0012B71F /* OrderKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE32CD4306C0ACA0012B71F /* XCRemoteSwiftPackageReference "exchange24-kit" */;
+			productName = OrderKit;
+		};
+		EFE32CDB306C0ACA0012B71F /* OrderKitMocks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE32CD4306C0ACA0012B71F /* XCRemoteSwiftPackageReference "exchange24-kit" */;
+			productName = OrderKitMocks;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EFE32C8B306BD1B50012B71F /* Project object */;
 }

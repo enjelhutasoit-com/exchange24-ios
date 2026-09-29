@@ -1,0 +1,15 @@
+{
+  "originHash" : "51951bc2238cf07ef7ee47abad4481a1cc2c4c624f27f7037f6d87e8f8d4ec2c",
+  "pins" : [
+    {
+      "identity" : "exchange24-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/enjelhutasoit-com/exchange24-kit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "155081bdd94cb34d27cdec73245e95815130fa9c"
+      }
+    }
+  ],
+  "version" : 3
+}
