@@ -23,18 +23,28 @@ import OrderKitMocks
 public final class AppEnvironment: ObservableObject {
     public let marketTransport: SimulatedMarketTransport
     public let exchange: SimulatedExchange
-    
+
     public private(set) var connectionManager: ConnectionManager
     public private(set) var marketStore: MarketDataStore
     public private(set) var orderMachine: OrderStateMachine
-    
+
+    /// Bumped by simulateRestart(). WatchlistViewModel and OrdersViewModel
+    /// are built once, at init, from the actor instances above — plain
+    /// (non-@Published) reassignment of those properties does not by
+    /// itself tell SwiftUI anything changed. The view layer applies
+    /// `.id(environment.generation)` to its root content so a bump here
+    /// forces a full teardown/rebuild of every screen and its view model,
+    /// rebinding them to the fresh actors. Without this, a restart demo
+    /// would silently keep talking to the actors from before the "kill".
+    @Published public private(set) var generation = 0
+
     /// Kept outside recreation so simulateRestart() can rebuild every
     /// in-memory piece while preserving what a real app's on-disk
     /// persistence would have survived.
     private let orderStore: InMemoryOrderStore
-    
+
     private var tasks: [Task<Void, Never>] = []
-    
+
     public init() {
         let transport = SimulatedMarketTransport()
         let exchange = SimulatedExchange()
@@ -58,17 +68,18 @@ public final class AppEnvironment: ObservableObject {
     public func simulateRestart() {
         for task in tasks { task.cancel() }
         tasks.removeAll()
-        
+
         connectionManager = ConnectionManager(transport: marketTransport)
         marketStore = MarketDataStore()
         orderMachine = OrderStateMachine(gateway: exchange, store: orderStore)
-        
+        generation += 1
+
         startBackgroundLoops()
         Task { [orderMachine] in
             await orderMachine.recoverAll()
         }
     }
-    
+
     private func startBackgroundLoops() {
         let connectionManager = self.connectionManager
         let marketStore = self.marketStore

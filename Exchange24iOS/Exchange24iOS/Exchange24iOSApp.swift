@@ -15,6 +15,13 @@ struct Exchange24iOSApp: App {
         WindowGroup {
             RootTabView()
                 .environmentObject(environment)
+            // Forces a full teardown/rebuild of every screen and its
+            // view model whenever AppEnvironment.generation changes
+            // (bumped by simulateRestart()). Without this, screens
+            // already on-screen would keep holding @StateObject view
+            // models built at init time, still bound to the actor
+            // instances from before the simulated "kill".
+                .id(environment.generation)
         }
     }
 }
@@ -30,27 +37,9 @@ private struct RootTabView: View {
             .tabItem { Label("Watchlist", systemImage: "chart.line.uptrend.xyaxis") }
             
             NavigationStack {
-                OrdersPlaceholderView()
+                OrdersView(environment: environment)
             }
             .tabItem { Label("Orders", systemImage: "list.bullet.rectangle") }
         }
-    }
-}
-
-/// Placeholder for this commit only: the Orders screen with sabotage
-/// controls and the "what the server actually has" panel is the next
-/// commit. Keeps the restart demo control reachable in the meantime.
-private struct OrdersPlaceholderView: View {
-    @EnvironmentObject private var environment: AppEnvironment
-    
-    var body: some View {
-        VStack(spacing: 12) {
-            Text("Orders screen lands next commit")
-                .foregroundStyle(.secondary)
-            Button("Simulate app restart") {
-                environment.simulateRestart()
-            }
-        }
-        .navigationTitle("Orders")
     }
 }
