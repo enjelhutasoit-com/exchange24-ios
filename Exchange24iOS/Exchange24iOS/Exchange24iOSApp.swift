@@ -9,41 +9,48 @@ import SwiftUI
 
 @main
 struct Exchange24iOSApp: App {
+    @StateObject private var environment = AppEnvironment()
+    
     var body: some Scene {
         WindowGroup {
-            WrickingCheckView()
+            RootTabView()
+                .environmentObject(environment)
         }
     }
 }
 
-/// Placeholder root view for this commit only: proves the composition
-/// root builds and the background loops run, before the Watchlist and
-/// Orders screens replace it. Intentionally not reactive yet — polling
-/// a couple of actor values on a timer is fine for a throwaway debug
-/// view; the real screens (next commits) bridge AsyncStreams properly.
-struct WrickingCheckView: View {
+private struct RootTabView: View {
     @EnvironmentObject private var environment: AppEnvironment
-    @State private var symbolCount = 0
-    @State private var conflatedCount = 0
     
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    var body: some View {
+        TabView {
+            NavigationStack {
+                WatchlistView(environment: environment)
+            }
+            .tabItem { Label("Watchlist", systemImage: "chart.line.uptrend.xyaxis") }
+            
+            NavigationStack {
+                OrdersPlaceholderView()
+            }
+            .tabItem { Label("Orders", systemImage: "list.bullet.rectangle") }
+        }
+    }
+}
+
+/// Placeholder for this commit only: the Orders screen with sabotage
+/// controls and the "what the server actually has" panel is the next
+/// commit. Keeps the restart demo control reachable in the meantime.
+private struct OrdersPlaceholderView: View {
+    @EnvironmentObject private var environment: AppEnvironment
     
     var body: some View {
         VStack(spacing: 12) {
-            Text("Exchange24 — composition root wired")
-                .font(.headline)
-            Text("\(symbolCount) instruments tracked")
-            Text("\(conflatedCount) ticks conflated so far")
+            Text("Orders screen lands next commit")
+                .foregroundStyle(.secondary)
             Button("Simulate app restart") {
                 environment.simulateRestart()
             }
         }
-        .padding()
-        .onReceive(timer) { _ in
-            Task {
-                symbolCount = await environment.marketStore.currentState().count
-                conflatedCount = await environment.marketStore.conflatedUpdateCount()
-            }
-        }
+        .navigationTitle("Orders")
     }
 }
