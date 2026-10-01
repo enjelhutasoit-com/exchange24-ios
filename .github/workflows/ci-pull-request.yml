@@ -1,0 +1,43 @@
+name: CI - Pull Request Validation
+
+# Triggers only on Pull Request events to the main branch
+on:
+  pull_request:
+    branches:
+      - main
+    # Save macOS runner minutes: Only run if iOS code files change
+    paths:
+      - '**.swift'
+      - '**.xcodeproj'
+      - '**.xcworkspace'
+      - 'Podfile'
+      - 'Package.swift'
+
+jobs:
+  validate-and-test:
+    name: Lint and Test iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode Version
+        uses: xcode-actions/setup-xcode@v3
+        with:
+          xcode-version: 'latest-stable'
+
+      - name: Run SwiftLint (Code Quality)
+        run: |
+          if which swiftlint >/dev/null; then
+            swiftlint
+          else
+            echo "SwiftLint not installed on runner, skipping until configured."
+          fi
+
+      - name: Run Unit Tests
+        run: |
+          xcodebuild test \
+            -scheme "Exchange24iOS" \
+            -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" \
+            -quiet

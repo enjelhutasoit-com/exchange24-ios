@@ -1,0 +1,41 @@
+name: CD - Main Deployment
+
+# Triggers automatically after PR merge (push to main)
+# Includes 'workflow_dispatch' to let you click a "Run workflow" button manually on GitHub
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.swift'
+      - '**.xcodeproj'
+      - '**.xcworkspace'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build Archive and Deploy
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode Version
+        uses: xcode-actions/setup-xcode@v3
+        with:
+          xcode-version: 'latest-stable'
+
+      # In Big Tech, this step usually triggers Fastlane to handle Apple Code Signing and uploads
+      - name: Build iOS Archive (Simulation)
+        run: |
+          echo "Starting application build archive process..."
+          xcodebuild archive \
+            -scheme "Exchange24iOS" \
+            -destination "generic/platform=iOS" \
+            -archivePath "./build/YourAppName.xcarchive" \
+            -quiet
+
+      - name: Deploy to TestFlight (Simulation)
+        run: |
+          echo "Uploading .ipa package to Apple TestFlight..."
